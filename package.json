@@ -5,12 +5,13 @@
   "main": "lib/index.js",
   "type": "module",
   "engines": {
-    "node": ">= 16 < 19"
+    "node": ">= 14.8 < 19"
   },
   "scripts": {
     "prismaGenerate": "prisma generate",
     "prismaReset": "pnpm prisma migate reset",
-    "start": "node --experimental-vm-modules --experimental-specifier-resolution=node lib"
+    "start": "NODE_ENV='development' node --experimental-vm-modules --experimental-specifier-resolution=node lib",
+    "test": "./scripts/test"
   },
   "dependencies": {
     "@luke-zhang-04/utils": "github:Luke-zhang-04/utils#semver:^2.0.1",

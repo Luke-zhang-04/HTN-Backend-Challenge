@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator pothos {
-  provider = "prisma-pothos-types"
+  provider      = "prisma-pothos-types"
+  binaryTargets = ["native"]
 }
 
 generator client {
