@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "prismaGenerate": "prisma generate"
+  },
   "dependencies": {
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -35,6 +37,6 @@
     "typescript": "^4.9.5"
   },
   "prisma": {
-    "seed": "./script/seed"
+    "seed": "./scripts/seed"
   }
 }

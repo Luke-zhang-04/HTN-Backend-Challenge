@@ -1,0 +1,39 @@
+datasource db {
+  url      = env("DB_URL")
+  provider = "mysql"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./.prisma"
+  binaryTargets = ["native"]
+}
+
+model Skill {
+  id         Int         @id @default(autoincrement()) @db.UnsignedInt
+  skill      String      @unique @db.VarChar(16)
+  userSkills UserSkill[]
+
+  @@map("skill")
+}
+
+model UserSkill {
+  id      Int   @id @default(autoincrement()) @db.UnsignedInt
+  userId  Int   @db.UnsignedInt
+  skillId Int   @db.UnsignedInt
+  rating  Int
+  user    User  @relation(fields: [userId], references: [id])
+  skill   Skill @relation(fields: [skillId], references: [id])
+
+  @@map("userSkill")
+}
+
+model User {
+  id         Int         @id @default(autoincrement()) @db.UnsignedInt
+  name       String      @db.VarChar(32)
+  email      String      @unique @db.VarChar(256)
+  phone      String      @db.VarChar(32) // https://stackoverflow.com/a/4729239/12370337
+  userSkills UserSkill[]
+
+  @@map("user")
+}

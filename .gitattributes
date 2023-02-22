@@ -6,6 +6,3 @@
 
 # Prisma
 *.prisma linguist-detectable=true
-
-# NPM Package Mods
-npm/**/* linguist-detectable=false
