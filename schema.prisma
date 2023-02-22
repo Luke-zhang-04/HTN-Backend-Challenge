@@ -10,29 +10,47 @@ generator client {
 }
 
 model Skill {
-  id         Int         @id @default(autoincrement()) @db.UnsignedInt
-  skill      String      @unique @db.VarChar(16)
+  id    Int    @id @default(autoincrement()) @db.UnsignedInt
+  skill String @unique @db.VarChar(16)
+
   userSkills UserSkill[]
 
   @@map("skill")
 }
 
 model UserSkill {
-  id      Int   @id @default(autoincrement()) @db.UnsignedInt
-  userId  Int   @db.UnsignedInt
-  skillId Int   @db.UnsignedInt
+  id      Int @id @default(autoincrement()) @db.UnsignedInt
+  userId  Int @db.UnsignedInt
+  skillId Int @db.UnsignedInt
   rating  Int
-  user    User  @relation(fields: [userId], references: [id])
-  skill   Skill @relation(fields: [skillId], references: [id])
+
+  user  User  @relation(fields: [userId], references: [id])
+  skill Skill @relation(fields: [skillId], references: [id])
 
   @@map("userSkill")
 }
 
+// https://stackoverflow.com/questions/723587/whats-the-longest-possible-worldwide-phone-number-i-should-consider-in-sql-varc/4729239#4729239
+// https://en.wikipedia.org/wiki/List_of_international_call_prefixes
+model PhoneNumber {
+  id     Int     @id @default(autoincrement()) @db.UnsignedInt
+  prefix String? @db.VarChar(5)
+  main   String  @db.VarChar(15)
+  ext    String? @db.VarChar(11)
+  userId Int     @unique @db.UnsignedInt
+
+  User User @relation(fields: [userId], references: [id])
+
+  @@map("phoneNumber")
+}
+
 model User {
-  id         Int         @id @default(autoincrement()) @db.UnsignedInt
-  name       String      @db.VarChar(32)
-  email      String      @unique @db.VarChar(256)
-  phone      String      @db.VarChar(32) // https://stackoverflow.com/a/4729239/12370337
+  id      Int    @id @default(autoincrement()) @db.UnsignedInt
+  name    String @db.VarChar(32)
+  company String @db.VarChar(64)
+  email   String @unique @db.VarChar(256)
+
+  phone      PhoneNumber?
   userSkills UserSkill[]
 
   @@map("user")

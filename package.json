@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prismaGenerate": "prisma generate"
+    "prismaGenerate": "prisma generate",
+    "prismaReset": "pnpm prisma migate reset"
   },
   "dependencies": {
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
     "graphql-yoga": "^3.7.0",
@@ -37,6 +39,6 @@
     "typescript": "^4.9.5"
   },
   "prisma": {
-    "seed": "./scripts/seed"
+    "seed": "node ./scripts/seed.js"
   }
 }
