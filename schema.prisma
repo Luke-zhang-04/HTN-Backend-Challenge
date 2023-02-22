@@ -3,6 +3,10 @@ datasource db {
   provider = "mysql"
 }
 
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
 generator client {
   provider      = "prisma-client-js"
   output        = "./.prisma"

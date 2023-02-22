@@ -1,0 +1,19 @@
+type Skill {
+    name: String!
+    freq: Int!
+}
+
+type UserSkill {
+    rating: Int!
+    skill: Skill!
+}
+
+type User {
+    name: String!
+    email: String!
+    skills: [UserSkill!]!
+}
+
+type Query {
+    allUsers: [User!]!
+}

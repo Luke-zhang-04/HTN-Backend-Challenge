@@ -6,3 +6,6 @@
 
 # Prisma
 *.prisma linguist-detectable=true
+
+# GQL
+*.gql linguist-detectable=true

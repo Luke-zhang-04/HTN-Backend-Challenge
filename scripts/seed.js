@@ -6,11 +6,9 @@ dotenv.config()
 
 const prisma = new PrismaClient()
 
-/* eslint-disable @typescript-eslint/no-empty-function */
 process.on("exit", () => prisma.$disconnect().catch(() => {}))
 process.on("beforeExit", () => prisma.$disconnect().catch(() => {}))
 process.on("SIGINT", () => prisma.$disconnect().catch(() => {}))
-/* eslint-enable @typescript-eslint/no-empty-function */
 
 /**
  * @param {string} phoneNumber
