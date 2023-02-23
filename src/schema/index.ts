@@ -1,6 +1,6 @@
 import {builder} from "../builder"
 import {prisma} from "../db"
-import {filterMap, omit} from "@luke-zhang-04/utils"
+import {type Skill} from "../../.prisma"
 
 // NOTE: this regex is "good enough" (I wrote it) for this dataset, but may fail with other inputs.
 // A better regex can probably be found online.
@@ -132,29 +132,20 @@ builder.queryFields((t) => ({
             minFrequency: t.arg.int({required: true}),
             maxFrequency: t.arg.int({required: true}),
         },
-        resolve: async (query, _parent, args) =>
-            filterMap(
-                await prisma.skill.findMany({
-                    ...query,
-                    select: {
-                        _count: {
-                            select: {
-                                userSkills: true,
-                            },
-                        },
-                        skill: true,
-                        id: true,
-                    },
-                }),
-                // Prisma doesn't support a having clause in their where queries,
-                // And I can't be arsed to write the raw fucking query myself
-                (val) => ({
-                    shouldInclude:
-                        val._count.userSkills >= args.minFrequency &&
-                        val._count.userSkills < args.maxFrequency,
-                    value: {...omit(val, "_count"), frequency: val._count.userSkills},
-                }),
-            ),
+        resolve: async (_query, _parent, args) =>
+            // Holy shit
+            (await prisma.$queryRaw/*sql*/ `
+                SELECT skill.id, skill.skill, userSkills.frequency
+                FROM skill
+                LEFT JOIN (
+                    SELECT userSkill.skillId, COUNT(*) AS frequency
+                    FROM userSkill
+                    GROUP BY userSkill.skillId
+                ) AS userSkills
+                ON (skill.id = userSkills.skillId)
+                -- Do NOT be alarmed, emplate strings are sanitized because of fancy tagged template
+                HAVING userSkills.frequency >= ${args.minFrequency} AND userSkills.frequency < ${args.maxFrequency}
+                `) as readonly Skill[],
     }),
 }))
 
