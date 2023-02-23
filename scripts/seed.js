@@ -65,7 +65,7 @@ for (const user of data) {
         })
 
         // Create skills with loop (couldn't think of a good way)
-        // Perfoamce impract is negligible since each user shouldn't have more than 10 or so skills
+        // Performance impract is negligible since each user shouldn't have more than 10 or so skills
         for (const skill of user.skills) {
             await prisma.user.update({
                 where: {id: dbUser.id},

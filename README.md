@@ -8,8 +8,6 @@ I would also like to point out that a lot of the code here is shit. I have other
 
 Finally, this stuff is bare minimum, complying with the given spec of the challenge (expect for the tests). For example, users does not have full CRUD support, only reading and updating.
 
-Also, no Docker setup. No time for that.
-
 Some bare-minimum tests are in the `__tests__` directory. They demonstrate usage.
 
 ## What It's Made of
@@ -27,6 +25,12 @@ Pretty simple, bog-standard app that took forever to set up.
 ## Running
 
 I'll try to get Docker set up later.
+
+## Database
+
+Database schema at [schema.prisma](schema.prisma)
+
+Seeding script can be found at [./scripts/seed.js](./scripts/seed.js). Note that my implementation skips duplicate emails.
 
 ## Queries
 
