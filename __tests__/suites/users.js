@@ -75,4 +75,30 @@ describe("users", () => {
         expect(user.skills[1].rating).toBe(1)
         expect(user.skills[1].frequency).toBe(33)
     })
+
+    it("should update user", async () => {
+        const query = /* GraphQL */ `
+            mutation {
+                updateUser(
+                    userId: 1
+                    data: {phone: "+1 (555) 123 4567", company: "DEEZ NUTS LTD"}
+                ) {
+                    name
+                    company
+                    phone
+                    email
+                }
+            }
+        `
+
+        const {body} = await request().post(`/graphql`).send({query}).expect(200)
+        const user = body.data.updateUser
+
+        await userSchema.required().validate(user)
+
+        expect(user.name).toBe("Breanna Dillon")
+        expect(user.company).toBe("DEEZ NUTS LTD")
+        expect(user.email).toBe("lorettabrown@example.net")
+        expect(user.phone).toBe("+1 (555) 123-4567")
+    })
 })

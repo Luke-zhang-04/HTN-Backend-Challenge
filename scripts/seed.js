@@ -18,7 +18,7 @@ const handlePhoneNumber = (phoneNumber) => {
     // NOTE: this regex is "good enough" (I wrote it) for this dataset, but may fail with other inputs.
     // A better regex can probably be found online.
     const details = phoneNumber.match(
-        /^(?<prefix>(\+|0+)1)?-?\(?(?<first>\d{3})\)?[.-]?(?<second>\d{3})[.-]?(?<third>\d{4})(x(?<ext>\d+))?$/,
+        /^(?<prefix>(\+|0+)1)?[ -]?\(?(?<first>\d{3})\)?[ .-]?(?<second>\d{3})[ .-]?(?<third>\d{4})(x(?<ext>\d+))?$/,
     )
 
     if (

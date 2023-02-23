@@ -13,4 +13,4 @@ export const builder = new SchemaBuilder<{
 })
 
 builder.queryType({})
-// builder.mutationType({})
+builder.mutationType({})
