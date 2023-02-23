@@ -4,11 +4,11 @@
 
 Please remember the cost this submission may have on my midterm grades. ECE 106 midterm looks less passable by the day.
 
-I would also like to point out that a lot of the code here is shit. I have other things to do. If you want to see something better, I have [https://github.com/talentmaker/api](https://github.com/talentmaker/api).
+I would also like to point out that a lot of the code here is shit. I'm busy. If you want to see something better, I have [https://github.com/talentmaker/api](https://github.com/talentmaker/api).
 
 Finally, this stuff is bare minimum, complying with the given spec of the challenge (expect for the tests). For example, users does not have full CRUD support, only reading and updating.
 
-Some bare-minimum tests are in the `__tests__` directory. They demonstrate usage.
+A few tests are in the `__tests__` directory. They demonstrate usage.
 
 ## What It's Made of
 
@@ -24,7 +24,7 @@ Pretty simple, bog-standard app that took forever to set up.
 
 ## Running
 
-I'll try to get Docker set up later.
+To run, use `docker-compose up`. App will be on port 3333.
 
 ## Database
 

@@ -145,7 +145,7 @@ builder.queryFields((t) => ({
                     GROUP BY userSkill.skillId
                 ) AS userSkills
                 ON (skill.id = userSkills.skillId)
-                -- Do NOT be alarmed, emplate strings are sanitized because of fancy tagged template
+                -- Do NOT be alarmed, template strings are sanitized because of fancy tagged template
                 HAVING userSkills.frequency >= ${args.minFrequency} AND userSkills.frequency < ${args.maxFrequency}
                 `) as readonly Skill[],
     }),

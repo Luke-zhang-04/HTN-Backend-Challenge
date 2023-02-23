@@ -33,17 +33,21 @@ const handlePhoneNumber = (phoneNumber) => {
     return details.groups
 }
 
-const data = await (
+const data = (await (
     await fetch(
         "https://gist.githubusercontent.com/faizaanmadhani/6bf87ac6d8975b2bd45aba9fd96515ca/raw/795f99b519d6e2c33bb2b89c0707be7f06cff95d/HTN_2023_BE_Challenge_Data.json",
     )
-).json() // as {
+).json()) // as {
 //     name: string
 //     company: string
 //     email: string
 //     phone: string
 //     skills: {skill: string; rating: number}[]
 // }[]
+
+let created = 0
+
+console.log("Seeding database...")
 
 for (const user of data) {
     const phoneNumber = handlePhoneNumber(user.phone)
@@ -64,35 +68,33 @@ for (const user of data) {
             },
         })
 
-        // Create skills with loop (couldn't think of a good way)
-        // Performance impract is negligible since each user shouldn't have more than 10 or so skills
-        for (const skill of user.skills) {
-            await prisma.user.update({
-                where: {id: dbUser.id},
-                data: {
-                    userSkills: {
-                        create: {
-                            rating: skill.rating,
-                            skill: {
-                                connectOrCreate: {
-                                    where: {
-                                        skill: skill.skill,
-                                    },
-                                    create: {
-                                        skill: skill.skill,
-                                    },
+        await prisma.user.update({
+            where: {id: dbUser.id},
+            data: {
+                userSkills: {
+                    create: user.skills.map((skill) => ({
+                        rating: skill.rating,
+                        skill: {
+                            connectOrCreate: {
+                                where: {
+                                    skill: skill.skill,
+                                },
+                                create: {
+                                    skill: skill.skill,
                                 },
                             },
                         },
-                    },
+                    })),
                 },
-            })
-        }
+            },
+        })
+
+        created++
     } catch (err) {
         // Duplicate emails should not be allowed
         if (err.message.includes("user_email_key")) {
-            console.error(err)
-            console.info("This is a duplicate email error, skipping")
+            // console.error(err)
+            // console.info("This is a duplicate email error, skipping")
 
             continue
         } else {
@@ -100,7 +102,7 @@ for (const user of data) {
         }
     }
 
-    console.log(`Created user ${user.name}`)
+    // console.log(`Created user ${user.name}`)
 }
 
-console.log("Done")
+console.log(`Done, seeded database with ${created} users.`)
