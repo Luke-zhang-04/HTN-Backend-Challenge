@@ -1,5 +1,34 @@
 import {builder} from "../builder"
 import {prisma} from "../db"
+import {filterMap, omit} from "@luke-zhang-04/utils"
+
+const skill = builder.prismaObject("Skill", {
+    fields: (t) => ({
+        id: t.exposeID("id"),
+        skill: t.exposeString("skill"),
+        frequency: t.field({
+            type: "Int",
+            resolve: async (parent) =>
+                await prisma.userSkill.count({where: {skill: {skill: parent.skill}}}),
+        }),
+        rating: t.field({
+            type: "Int",
+            nullable: true,
+            args: {
+                userId: t.arg.int({required: false}),
+            },
+            resolve: async (parent, args) =>
+                args.userId
+                    ? (
+                          await prisma.userSkill.findFirst({
+                              where: {skillId: parent.id, userId: args.userId},
+                              select: {rating: true},
+                          })
+                      )?.rating
+                    : null,
+        }),
+    }),
+})
 
 builder.prismaObject("PhoneNumber", {
     fields: (t) => ({
@@ -7,7 +36,6 @@ builder.prismaObject("PhoneNumber", {
         prefix: t.exposeString("prefix", {nullable: true}),
         main: t.exposeString("main"),
         ext: t.exposeString("ext", {nullable: true}),
-        user: t.relation("User"),
     }),
 })
 
@@ -38,6 +66,19 @@ builder.prismaObject("User", {
                 )
             },
         }),
+        skills: t.field({
+            type: [skill],
+            resolve: async (parent) => {
+                const res = (
+                    await prisma.userSkill.findMany({
+                        where: {userId: parent.id},
+                        select: {rating: true, skill: {select: {id: true, skill: true}}},
+                    })
+                ).map(({rating, skill}) => ({rating, ...skill}))
+
+                return res
+            },
+        }),
     }),
 })
 
@@ -63,6 +104,36 @@ builder.queryFields((t) => ({
         },
         resolve: async (query, _, args) =>
             await prisma.phoneNumber.findUnique({where: {userId: args.id}, ...query}),
+    }),
+    skills: t.prismaField({
+        type: ["Skill"],
+        args: {
+            minFrequency: t.arg.int({required: true}),
+            maxFrequency: t.arg.int({required: true}),
+        },
+        resolve: async (query, _, args) =>
+            filterMap(
+                await prisma.skill.findMany({
+                    ...query,
+                    select: {
+                        _count: {
+                            select: {
+                                userSkills: true,
+                            },
+                        },
+                        skill: true,
+                        id: true,
+                    },
+                }),
+                // Not sure how I'm supposed to implement this part with an ORM
+                // (or with raw SQL even)
+                (val) => ({
+                    shouldInclude:
+                        val._count.userSkills >= args.minFrequency &&
+                        val._count.userSkills < args.maxFrequency,
+                    value: {...omit(val, "_count"), frequency: val._count.userSkills},
+                }),
+            ),
     }),
 }))
 

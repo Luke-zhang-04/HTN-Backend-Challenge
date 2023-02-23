@@ -16,7 +16,7 @@ generator client {
 
 model Skill {
   id    Int    @id @default(autoincrement()) @db.UnsignedInt
-  skill String @unique @db.VarChar(16)
+  skill String @unique @db.VarChar(32)
 
   userSkills UserSkill[]
 
