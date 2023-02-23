@@ -16,9 +16,7 @@ describe("Test express server", () => {
     })
 })
 
-describe("allUsers", () => {
-    it("shouldGetAllUsers", async () => {})
-})
+await import("./suites")
 
 afterAll(async () => {
     await db.prisma.$disconnect()
