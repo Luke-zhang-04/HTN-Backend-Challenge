@@ -2,7 +2,7 @@
 
 ## Preamble
 
-Please remember the cost this submission may have on my midterm grades. ECE 106 midterm looks less passable by the day.
+Please remember the cost this submission may have on my midterm grades. ECE 106 midterm looks less passable by the day. I made the mistake of trying to learn and use GraphQL in a day during midterm week. Bad idea.
 
 I would also like to point out that a lot of the code here is shit. I'm busy. If you want to see something better, I have [https://github.com/talentmaker/api](https://github.com/talentmaker/api).
 
